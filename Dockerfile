@@ -1,5 +1,18 @@
+# Stage 1: Use an official Node.js image to access npm and Node.js
+FROM node:20-slim AS node
+
 # Use the official PHP 8.2 FPM image as the base image
 FROM php:8.2-fpm
+
+# Copy the Node.js and npm executables from the Node.js image
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/bin/npm /usr/local/bin/npm
+
+# Copy the Node.js libraries
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+
+# Optionally, set the PATH environment variable to include npm binaries
+ENV PATH="/usr/local/lib/node_modules/npm/bin:$PATH"
 
 # Set environment variables
 ENV PHP_OPCACHE_ENABLE=1
@@ -12,6 +25,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update and install all required system dependencies and PHP extensions in a single step.
 RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
     unzip \
     curl \
     libpq-dev \
