@@ -99,8 +99,12 @@ force_deploy_service() {
     fi
 }
 
+# generate cluster and service arn
 select_ecs_cluster
 select_ecs_service "$CLUSTER_NAME"
+
+# npm
+npm run build
 
 sh ./docker-build.sh
 
