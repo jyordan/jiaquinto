@@ -11,7 +11,7 @@ select_ecs_cluster() {
     local cluster_name="$1"
 
     # Get the list of clusters
-    clusters=$(aws ecs list-clusters --query 'clusterArns[*]' --output text)
+    clusters=$(aws ecs list-clusters --profile jy-project-01 --query 'clusterArns[*]' --output text)
 
     # Check if any clusters are returned
     if [ -z "$clusters" ]; then
@@ -47,7 +47,7 @@ select_ecs_service() {
     local cluster_name="$1"
 
     # Get the list of services
-    services=$(aws ecs list-services --cluster "$cluster_name" --query 'serviceArns[*]' --output text)
+    services=$(aws ecs list-services --profile jy-project-01 --cluster "$cluster_name" --query 'serviceArns[*]' --output text)
 
     # Check if any services are returned
     if [ -z "$services" ]; then
@@ -84,6 +84,7 @@ force_deploy_service() {
 
         RESULT=$(
           aws ecs update-service \
+            --profile jy-project-01 \
             --cluster $CLUSTER_ARN \
             --service $SERVICE_ARN \
             --force-new-deployment \
@@ -106,7 +107,7 @@ sh ./docker-build.sh
 IMG_REPO="iaquinto/physio-backend"
 
 # AWS Account and Region Variables
-AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+AWS_ACCOUNT_ID=$(aws sts get-caller-identity --profile jy-project-01 --query "Account" --output text)
 AWS_REGION="ap-southeast-2"  # Change this to your desired AWS region
 
 # Generate AWS ECR Repository URL

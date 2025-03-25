@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # AWS Account and Region Variables
-AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+AWS_ACCOUNT_ID=$(aws sts get-caller-identity --profile jy-project-01 --query "Account" --output text)
 AWS_REGION="ap-southeast-2"  # Change this to your desired AWS region
 
 IMG_REPO="iaquinto/physio-backend"
