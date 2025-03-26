@@ -120,6 +120,7 @@ AWS_ECR_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMG_REPO"
 DIR_NAME="$(pwd | awk -F/ '{print $NF}')"
 IMG_NAME=$DIR_NAME
 
+sh ./aws-login.sh
 echo "pushing $AWS_ECR_URL $IMG_NAME..."
 
 docker tag $IMG_NAME:latest $AWS_ECR_URL
