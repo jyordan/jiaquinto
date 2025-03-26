@@ -9,8 +9,15 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('test-code:mail {email?}', function () {
+    $faker = Faker\Factory::create();
+
     $email = $this->argument('email');
-    Mail::raw('This is a test email.', function ($message) use ($email) {
-        $message->to($email ?: env('DEV_EMAIL'))->subject('Test Email');
+    $content = $faker->paragraph();
+
+    $subject = 'Test Email - ';
+    $subject .= $faker->word();
+
+    Mail::raw($content, function ($message) use ($email, $subject) {
+        $message->to($email ?: env('DEV_EMAIL'))->subject($subject);
     });
 })->purpose('Test email');
