@@ -46,8 +46,14 @@ class ClinikoMonitorCommand extends Command
             $opportunity = head($this->getOpportunities($pipelineId, $query));
             $contact = head($this->getContacts($query));
             if (!$opportunity) {
-                $opportunity = $this->newOpportunities($pipelineId, $pipelineStateId, $contact, $patient);
-                dump($patient, $opportunity, $contact, 'New opportunity');
+                if (!$contact) {
+                    $contact = $this->newContact($patient);
+                    dump($contact, 'New contact');
+                }
+                if ($contact) {
+                    $opportunity = $this->newOpportunities($pipelineId, $pipelineStateId, $contact, $patient);
+                    dump($patient, $opportunity, $contact, 'New opportunity');
+                }
             } else {
                 if (data_get($opportunity, 'pipelineStageId') != $pipelineStateId) {
                     $opportunity = $this->moveOpportunities($pipelineId, $pipelineStateId, $opportunity);
@@ -116,6 +122,45 @@ class ClinikoMonitorCommand extends Command
                 'contactId' => $contactId,
                 'status' => 'open',
                 'source' => 'Cliniko',
+            ],
+            'post'
+        );
+    }
+
+    protected function newContact(array $patient): array
+    {
+        $firstName = data_get($patient, 'first_name');
+        $lastName = data_get($patient, 'last_name');
+        $email = data_get($patient, 'email');
+        $phone = data_get($patient, 'patient_phone_numbers');
+        $dateOfBirth = data_get($patient, 'date_of_birth');
+        $city = data_get($patient, 'city');
+        $country = data_get($patient, 'country');
+        $state = data_get($patient, 'state');
+        $postalCode = data_get($patient, 'post_code');
+        $companyName = data_get($patient, 'Cliniko');
+
+        return $this->requestGoHighLevel(
+            "contacts",
+            [
+                "email" => $email,
+                "phone" => $phone,
+                "firstName" => $firstName,
+                "lastName" => $lastName,
+                "name" => "{$firstName} {$lastName}",
+                "dateOfBirth" => $dateOfBirth,
+                "address1" => null,
+                "city" => $city,
+                "state" => $state,
+                "country" => $country,
+                "postalCode" => $postalCode,
+                "companyName" => $companyName,
+                // "website" => "35061",
+                // "tags" => ["commodo", "veniam ut reprehenderit"],
+                "source" => "cliniko",
+                // "customField" => [
+                //     "__custom_field_id__" => "do in Lorem ut exercitation"
+                // ]
             ],
             'post'
         );
