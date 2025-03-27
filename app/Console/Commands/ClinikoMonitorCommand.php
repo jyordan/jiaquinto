@@ -50,7 +50,7 @@ class ClinikoMonitorCommand extends Command
                     $contact = $this->newContact($patient);
                     dump($contact, 'New contact');
                 }
-                if ($contact) {
+                if (data_get($contact, 'id')) {
                     $opportunity = $this->newOpportunities($pipelineId, $pipelineStateId, $contact, $patient);
                     dump($patient, $opportunity, $contact, 'New opportunity');
                 }
@@ -132,7 +132,8 @@ class ClinikoMonitorCommand extends Command
         $firstName = data_get($patient, 'first_name');
         $lastName = data_get($patient, 'last_name');
         $email = data_get($patient, 'email');
-        $phone = data_get($patient, 'patient_phone_numbers');
+        $patientPhoneNumbers = data_get($patient, 'patient_phone_numbers', []);
+        $phone = data_get(head($patientPhoneNumbers), 'normalized_number');
         $dateOfBirth = data_get($patient, 'date_of_birth');
         $city = data_get($patient, 'city');
         $country = data_get($patient, 'country');
