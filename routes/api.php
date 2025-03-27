@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(StaticBasicAuthMiddleware::class)->group(function () {
-    Route::get('/temp/log/form', VoucherFormController::class);
-
     Route::match(['get', 'post', 'put', 'delete', 'patch',], '/portal/go-high-level/v1/{any}', GoHighLevelController::class)->where('any', '.*');
 
     Route::match(['get', 'post', 'put', 'delete', 'patch',], '/portal/cliniko/v1/{any}', ClinikoController::class)->where('any', '.*');
