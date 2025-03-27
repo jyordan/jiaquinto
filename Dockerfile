@@ -50,6 +50,11 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Update package lists and install nano, cron, procps
+RUN apt-get update && apt-get install -y nano cron procps \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy composer executable.
 COPY --from=composer:2.4.2 /usr/bin/composer /usr/bin/composer
 
@@ -86,18 +91,18 @@ RUN chown -R www-data:www-data /var/www
 USER www-data
 
 # Install Laravel 8 into the existing directory
-RUN composer create-project --prefer-dist laravel/laravel:^8.0 .
+# RUN composer create-project --prefer-dist laravel/laravel:^8.0 .
 
 # Switch back to root for permission settings and cleanup
 USER root
 
-RUN chown -R www-data:www-data ./storage ./bootstrap/cache \
-    && chmod -R 775 ./storage ./bootstrap/cache
+# RUN chown -R www-data:www-data ./storage ./bootstrap/cache \
+#     && chmod -R 775 ./storage ./bootstrap/cache
 
-# Copy files from current folder to container current folder (set in workdir).
-COPY --chown=www-data:www-data ../public ./public/test
-COPY --chown=www-data:www-data ../public /var/web-test
-RUN cp -r . /var/app
+# # Copy files from current folder to container current folder (set in workdir).
+# COPY --chown=www-data:www-data ../public ./public/test
+# COPY --chown=www-data:www-data ../public /var/web-test
+# RUN cp -r . /var/app
 
 # Switch to the non-root user
 USER www-data
@@ -118,6 +123,11 @@ RUN echo "I am alive! $(date)" > ./public/check-alive.txt
 COPY ./docker/supervisord/nginx.conf /etc/supervisor/conf.d/nginx.conf
 COPY ./docker/supervisord/php-fpm.conf /etc/supervisor/conf.d/php-fpm.conf
 RUN chmod -R +x /etc/supervisor/conf.d
+
+# Setup laravel cron job
+RUN echo "* * * * * appuser $(which php) $(pwd)/artisan schedule:run >> /dev/null 2>&1" >> /etc/cron.d/mycron
+RUN chmod 644 /etc/cron.d/mycron
+RUN crontab /etc/cron.d/mycron
 
 # Remove the directory if it exists
 RUN rm -rf ./public
