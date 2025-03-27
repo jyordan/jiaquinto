@@ -8,6 +8,10 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
+Artisan::command('test:log', function () {
+    logger(Inspiring::quote());
+})->purpose('Log an inspiring quote');
+
 Artisan::command('test-code:mail {email?}', function () {
     $faker = Faker\Factory::create();
 
