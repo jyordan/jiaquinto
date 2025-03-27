@@ -45,6 +45,8 @@ class ClinikoMonitorCommand extends Command
 
             $opportunity = head($this->getOpportunities($pipelineId, $query));
             $contact = head($this->getContacts($query));
+            $isMoved = 0;
+
             if (!$opportunity) {
                 if (!$contact) {
                     $contact = $this->newContact($patient);
@@ -52,15 +54,27 @@ class ClinikoMonitorCommand extends Command
                 }
                 if (data_get($contact, 'id')) {
                     $opportunity = $this->newOpportunities($pipelineId, $pipelineStateId, $contact, $patient);
+                    $isMoved = 1;
                     dump($patient, $opportunity, $contact, 'New opportunity');
                 }
             } else {
                 if (data_get($opportunity, 'pipelineStageId') != $pipelineStateId) {
                     $opportunity = $this->moveOpportunities($pipelineId, $pipelineStateId, $opportunity);
+                    $isMoved = 1;
                     dump($patient, $opportunity, $contact, 'Move opportunity');
                 } else {
                     dump($patient, $opportunity, $contact, 'Same opportunity');
                 }
+            }
+
+            if ($isMoved) {
+                $contact = data_get($opportunity, 'contact');
+                $source = data_get($opportunity, 'source');
+                $name = data_get($contact, 'name');
+                $phone = data_get($contact, 'phone');
+                $email = data_get($contact, 'email');
+
+                $this->logSheet($name, $phone, $email, $source);
             }
         }
     }
@@ -214,6 +228,18 @@ class ClinikoMonitorCommand extends Command
             ->get($apiUrl);
 
         return json_decode($response->body(), true);
+    }
+
+    protected function logSheet(string $name, string $phone, string $email, string $workflow)
+    {
+        // Perform the HTTP request using Guzzle
+        Http::asForm()->post(env('GOOGLE_FORM_URL'), [
+            'entry.2135131916' => $name,
+            'entry.715138392' => $phone,
+            'entry.1706893644' => $email,
+            'entry.1016933667' => $workflow,
+            'entry.1297538632' => now()->toDateTimeString(),
+        ]);
     }
 
     protected function requestGoHighLevel(string $any, array $request = [], string $method = 'get'): array
