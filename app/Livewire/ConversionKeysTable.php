@@ -29,8 +29,7 @@ class ConversionKeysTable extends Component
         'cliniko_app_type_id' => '',
         'ghl_pipeline_id' => '',
         'ghl_pipeline_stage_id' => '',
-        'starts_at' => null,
-        'ends_at' => null,
+        'active_at' => true,
     ];
 
     protected $rules = [
@@ -40,8 +39,7 @@ class ConversionKeysTable extends Component
         'form.cliniko_app_type_id' => 'required|string',
         'form.ghl_pipeline_id' => 'required|string',
         'form.ghl_pipeline_stage_id' => 'required|string',
-        'form.starts_at' => 'nullable|date',
-        'form.ends_at' => 'nullable|date',
+        'form.active_at' => 'boolean',
     ];
 
     public function updatedFormClinikoApiKey()
@@ -146,8 +144,7 @@ class ConversionKeysTable extends Component
     {
         $this->validate();
 
-        $form = Arr::except($this->form, ['starts_at', 'ends_at']);
-        ConversionKey::updateOrCreate(['id' => $this->conversionKeyId], $form);
+        ConversionKey::updateOrCreate(['id' => $this->conversionKeyId], $this->form);
 
         session()->flash('message', $this->conversionKeyId ? 'Updated Successfully' : 'Created Successfully');
 

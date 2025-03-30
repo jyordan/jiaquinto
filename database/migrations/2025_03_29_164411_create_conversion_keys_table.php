@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('cliniko_app_type_id');
             $table->string('ghl_pipeline_id');
             $table->string('ghl_pipeline_stage_id');
-            $table->timestamp('starts_at')->nullable()->index();
-            $table->timestamp('ends_at')->nullable()->index();
+            $table->timestamp('active_at')->nullable()->index();
             $table->timestamps();
         });
     }

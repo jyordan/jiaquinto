@@ -21,11 +21,17 @@ class ConversionKey extends Model
         'cliniko_app_type_id',
         'ghl_pipeline_id',
         'ghl_pipeline_stage_id',
-        'starts_at',
-        'ends_at',
+        'active_at',
     ];
 
-    protected $dates = ['starts_at', 'ends_at'];
+    protected $dates = ['active_at'];
+
+    protected function activeAt(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => $value ? now() : null,
+        );
+    }
 
     protected function ghlPipelineStageName(): Attribute
     {

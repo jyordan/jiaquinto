@@ -21,6 +21,7 @@
                 <th class="border border-gray-300 px-4 py-2">Cliniko App Type</th>
                 <th class="border border-gray-300 px-4 py-2">GoHighLevel Pipeline</th>
                 <th class="border border-gray-300 px-4 py-2">GoHighLevel Pipeline Target Stage</th>
+                <th class="border border-gray-300 px-4 py-2">Status</th>
                 <th class="border border-gray-300 px-4 py-2">Actions</th>
             </tr>
         </thead>
@@ -41,6 +42,7 @@
                     <td class="border border-gray-300 px-4 py-2">{{ $key->cliniko_app_type_name }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_name }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_stage_name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $key->active_at ?: 'Disabled' }}</td>
                     <td class="border border-gray-300 px-4 py-2">
                         <button wire:click="openModal({{ $key->id }})"
                             class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
@@ -58,7 +60,8 @@
     <div
         class="{{ $showModal ? 'fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50' : 'hidden' }}">
         <div class="bg-white p-6 rounded-lg w-1/3">
-            <h2 class="text-lg text-black font-semibold mb-4">{{ $conversionKeyId ? 'Edit' : 'Add' }} Conversion Key</h2>
+            <h2 class="text-lg text-black font-semibold mb-4">{{ $conversionKeyId ? 'Edit' : 'Add' }} Conversion Key
+            </h2>
 
             <!-- Form -->
             <form wire:submit.prevent="save">
@@ -151,6 +154,13 @@
                             {{ $message }}
                         @enderror
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="checkbox" wire:model="form.active_at"
+                        class="w-4 h-4 text-blue-600  border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2  dark:border-gray-600"
+                        {{ $form['active_at'] ? 'checked' : '' }}>
+                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-black">Active</label>
                 </div>
 
                 <div class="flex justify-end mt-4">
