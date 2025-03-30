@@ -1,5 +1,7 @@
 <?php
 
+use App\Modules\Api\ClinikoApi;
+use App\Modules\Api\GoHighLevelApi;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
@@ -25,3 +27,13 @@ Artisan::command('test-code:mail {email?}', function () {
         $message->to($email ?: env('DEV_EMAIL'))->subject($subject);
     });
 })->purpose('Test email');
+
+Artisan::command('test-code:api', function () {
+    $cliniko = new ClinikoApi;
+    $cliniko->setToken(env('CLINIKO_USER'));
+    $appTypes = $cliniko->request('appointment_types');
+
+    $ghl = new GoHighLevelApi;
+    $ghl->setToken(env('GO_HIGH_LEVEL_KEY'));
+    $pipelines = $ghl->request('pipelines');
+})->purpose('Test code');
