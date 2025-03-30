@@ -3,8 +3,6 @@
 namespace App\Modules\Api;
 
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 
 class ClinikoApi extends BaseApi
 {
