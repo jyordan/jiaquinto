@@ -43,10 +43,13 @@ abstract class BaseApi
     {
         $pendingRequest = $this->setAuth(Http::acceptJson());
 
-        // Perform the HTTP request
-        $response = $pendingRequest->{$method}($apiUrl, $data);
-
-        return json_decode($response->body(), true);
+        try {
+            // Perform the HTTP request
+            $response = $pendingRequest->{$method}($apiUrl, $data);
+            return json_decode($response->body(), true) ?: [];
+        } catch (\Throwable $th) {
+            return [];
+        }
     }
 
     protected function setAuth(PendingRequest $pendingRequest): PendingRequest
