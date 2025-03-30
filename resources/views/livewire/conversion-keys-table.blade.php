@@ -17,7 +17,7 @@
                 <th class="border border-gray-300 px-4 py-2">ID</th>
                 <th class="border border-gray-300 px-4 py-2">Company Name</th>
                 <th class="border border-gray-300 px-4 py-2">Cliniko API Key</th>
-                <th class="border border-gray-300 px-4 py-2">GHL API Key</th>
+                <th class="border border-gray-300 px-4 py-2">GoHighLevel API Key</th>
                 <th class="border border-gray-300 px-4 py-2">Cliniko App Type</th>
                 <th class="border border-gray-300 px-4 py-2">GoHighLevel Pipeline</th>
                 <th class="border border-gray-300 px-4 py-2">GoHighLevel Pipeline Target Stage</th>
@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block text-gray-700">GHL API Key</label>
+                    <label class="block text-gray-700">GoHighLevel API Key</label>
                     <input type="text" wire:model.live="form.ghl_api_key"
                         class="text-black w-full p-2 border rounded">
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
