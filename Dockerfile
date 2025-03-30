@@ -154,5 +154,8 @@ RUN RANDOM_STRING=$(openssl rand -hex 8) && \
 # Copy laravel web-start-up.sh
 RUN chmod +x ./*.sh
 
+# Append prod.env to .env only if it exists
+RUN if [ -f prod.env ]; then cat prod.env >> .env; fi
+
 # Set the CMD to run the shell script
 CMD ["/var/www/app/web-start-up.sh"]
