@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('conversion_keys', function (Blueprint $table) {
             $table->id();
+            $table->string('company_name')->index();
             $table->string('cliniko_api_key');
             $table->string('ghl_api_key');
             $table->string('cliniko_app_type_id');
