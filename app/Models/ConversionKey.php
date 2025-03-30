@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Modules\Api\ClinikoApi;
 use App\Modules\Api\GoHighLevelApi;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -84,5 +85,13 @@ class ConversionKey extends Model
             ->where('id', $attributes['ghl_pipeline_id'])
             ->first();
         return $pipeline ?: [];
+    }
+
+    /**
+     * Scope a query to only include popular users.
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('active_at', '<=', now());
     }
 }

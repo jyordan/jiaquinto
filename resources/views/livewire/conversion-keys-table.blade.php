@@ -42,7 +42,7 @@
                     <td class="border border-gray-300 px-4 py-2">{{ $key->cliniko_app_type_name }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_name }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_stage_name }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $key->active_at ?: 'Disabled' }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $key->active_at ? 'Enable' : 'Disable' }}</td>
                     <td class="border border-gray-300 px-4 py-2">
                         <button wire:click="openModal({{ $key->id }})"
                             class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
