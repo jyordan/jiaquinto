@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Modules\Api;
+
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+
+class ClinikoApi extends BaseApi
+{
+    protected string $cachePrefix = 'cliniko';
+    protected string $baseUrl = 'https://api.au1.cliniko.com/v1/';
+
+    protected function setAuth(PendingRequest $pendingRequest): PendingRequest
+    {
+        // Perform the HTTP request
+        return $pendingRequest->withBasicAuth($this->getToken(), '');
+    }
+
+    protected function getData(array $data, string $method): array|null
+    {
+        if ($method == 'get' && !$data) return  null;
+        return $data;
+    }
+}
