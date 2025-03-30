@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\ConversionKey; // Ensure this matches your model name
+use App\Modules\Api\ClinikoApi;
+use App\Modules\Api\GoHighLevelApi;
 use Illuminate\Support\Arr;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,7 +18,12 @@ class ConversionKeysTable extends Component
     public $showDeleteModal = false;
     public $deleteId = null; // Store the ID for confirmation
 
+    public $optionGhlPipelines = [];
+    public $optionGhlPipelineStages = [];
+    public $optionClinikoAppTypes = [];
+
     public $form = [
+        'company_name' => '',
         'cliniko_api_key' => '',
         'ghl_api_key' => '',
         'cliniko_app_type_id' => '',
@@ -27,6 +34,7 @@ class ConversionKeysTable extends Component
     ];
 
     protected $rules = [
+        'form.company_name' => 'required|string',
         'form.cliniko_api_key' => 'required|string',
         'form.ghl_api_key' => 'required|string',
         'form.cliniko_app_type_id' => 'required|string',
@@ -36,6 +44,27 @@ class ConversionKeysTable extends Component
         'form.ends_at' => 'nullable|date',
     ];
 
+    public function updatedFormClinikoApiKey()
+    {
+        $this->form['cliniko_app_type_id'] = '';
+        $this->optionClinikoAppTypes = $this->getClinikoAppTypes($this->form['cliniko_api_key']);
+    }
+
+    public function updatedFormGhlApiKey()
+    {
+        $this->form['ghl_pipeline_id'] = '';
+        $this->form['ghl_pipeline_stage_id'] = '';
+
+        $this->optionGhlPipelines = $this->getGhlPipelines($this->form['ghl_api_key']);
+        $this->optionGhlPipelineStages = [];
+    }
+
+    public function updatedFormGhlPipelineId()
+    {
+        $this->form['ghl_pipeline_stage_id'] = '';
+        $this->optionGhlPipelineStages = $this->getGhlPipelineStages($this->form['ghl_pipeline_id']);
+    }
+
     public function openModal($id = null)
     {
         $this->resetInputFields();
@@ -43,6 +72,8 @@ class ConversionKeysTable extends Component
         if ($id) {
             $this->conversionKeyId = $id;
             $record = ConversionKey::findOrFail($id);
+
+            $this->setOptions($record);
 
             // Dynamically assign record values to form
             foreach (array_keys($this->form) as $key) {
@@ -63,7 +94,53 @@ class ConversionKeysTable extends Component
     {
         $this->conversionKeyId = null;
         $this->form = array_fill_keys(array_keys($this->form), ''); // Reset all fields
+
+        $this->optionGhlPipelines = [];
+        $this->optionGhlPipelineStages = [];
+        $this->optionClinikoAppTypes = [];
+
+        $this->reset();
     }
+
+    protected function setOptions($record)
+    {
+        $this->optionClinikoAppTypes = $this->getClinikoAppTypes($record->cliniko_api_key);
+
+        $this->optionGhlPipelines = $this->getGhlPipelines($record->ghl_api_key);
+        $this->optionGhlPipelineStages = $this->getGhlPipelineStages($record->ghl_pipeline_id);
+    }
+
+    protected function getClinikoAppTypes(string|null $token): array
+    {
+        if (!$token) return [];
+
+        $cliniko = new ClinikoApi;
+        $cliniko->setToken($token);
+        $appTypes = $cliniko->request('appointment_types');
+        return data_get($appTypes, 'appointment_types', []);
+    }
+
+    protected function getGhlPipelines(string|null $token): array
+    {
+        if (!$token) return [];
+
+        $ghl = new GoHighLevelApi;
+        $ghl->setToken($token);
+        $pipelines = $ghl->request('pipelines');
+        return data_get($pipelines, 'pipelines', []);
+    }
+
+    protected function getGhlPipelineStages(string|null $pipelineId): array
+    {
+        if (!$pipelineId) return [];
+
+        $pipeline = collect($this->optionGhlPipelines)
+            ->where('id', $pipelineId)
+            ->first();
+
+        return data_get($pipeline, 'stages', []);
+    }
+
 
     public function save()
     {

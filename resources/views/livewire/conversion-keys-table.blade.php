@@ -14,22 +14,33 @@
     <table class="w-full border-collapse border border-gray-300">
         <thead>
             <tr class="bg-gray-200 text-gray-700">
+                <th class="border border-gray-300 px-4 py-2">ID</th>
+                <th class="border border-gray-300 px-4 py-2">Company Name</th>
                 <th class="border border-gray-300 px-4 py-2">Cliniko API Key</th>
                 <th class="border border-gray-300 px-4 py-2">GHL API Key</th>
-                <th class="border border-gray-300 px-4 py-2">Cliniko App Type ID</th>
-                <th class="border border-gray-300 px-4 py-2">GHL Pipeline ID</th>
-                <th class="border border-gray-300 px-4 py-2">GHL Pipeline Stage ID</th>
+                <th class="border border-gray-300 px-4 py-2">Cliniko App Type</th>
+                <th class="border border-gray-300 px-4 py-2">GoHighLevel Pipeline</th>
+                <th class="border border-gray-300 px-4 py-2">GoHighLevel Pipeline Target Stage</th>
                 <th class="border border-gray-300 px-4 py-2">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($conversionKeys as $key)
                 <tr>
-                    <td class="border border-gray-300 px-4 py-2">{{ $key->cliniko_api_key }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_api_key }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $key->cliniko_app_type_id }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_id }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_stage_id }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-wrap">{{ $key->id }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-wrap">{{ $key->company_name }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-wrap">
+                        <div class="overflow-hidden whitespace-nowrap text-ellipsis" style="width: 200px">
+                            {{ $key->cliniko_api_key }}
+                        </div>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2 text-wrap">
+                        <div class="overflow-hidden whitespace-nowrap text-ellipsis" style="width: 200px">
+                            {{ $key->ghl_api_key }}</div>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $key->cliniko_app_type_name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $key->ghl_pipeline_stage_name }}</td>
                     <td class="border border-gray-300 px-4 py-2">
                         <button wire:click="openModal({{ $key->id }})"
                             class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
@@ -47,37 +58,99 @@
     <div
         class="{{ $showModal ? 'fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50' : 'hidden' }}">
         <div class="bg-white p-6 rounded-lg w-1/3">
-            <h2 class="text-lg font-semibold mb-4">{{ $conversionKeyId ? 'Edit' : 'Add' }} Conversion Key</h2>
+            <h2 class="text-lg text-black font-semibold mb-4">{{ $conversionKeyId ? 'Edit' : 'Add' }} Conversion Key</h2>
 
             <!-- Form -->
             <form wire:submit.prevent="save">
                 <div class="mb-3">
-                    <label class="block text-gray-700">Cliniko API Key</label>
-                    <input type="text" wire:model="form.cliniko_api_key"
+                    <label class="block text-gray-700">Company Name</label>
+                    <input type="text" wire:model.live="form.company_name"
                         class="text-black w-full p-2 border rounded">
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.company_name')
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block text-gray-700">Cliniko API Key</label>
+                    <input type="text" wire:model.live="form.cliniko_api_key"
+                        class="text-black w-full p-2 border rounded">
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.cliniko_api_key')
+                            {{ $message }}
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="block text-gray-700">GHL API Key</label>
-                    <input type="text" wire:model="form.ghl_api_key" class="text-black w-full p-2 border rounded">
+                    <input type="text" wire:model.live="form.ghl_api_key"
+                        class="text-black w-full p-2 border rounded">
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.ghl_api_key')
+                            {{ $message }}
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="block text-gray-700">Cliniko App Type ID</label>
-                    <input type="text" wire:model="form.cliniko_app_type_id"
-                        class="text-black w-full p-2 border rounded">
+                    <label class="block text-gray-700">Cliniko App Type</label>
+                    <select wire:model.live="form.cliniko_app_type_id" class="text-black border p-2 rounded w-full"
+                        @if (!$form['cliniko_api_key']) disabled @endif>
+                        <option value="">Cliniko App Type</option>
+                        @foreach ($optionClinikoAppTypes as $k => $appType)
+                            <option value="{{ data_get($appType, 'id') }}"
+                                wire:key="cliniko_app_type_id-{{ data_get($appType, 'id') }}"
+                                {{ $form['cliniko_app_type_id'] == data_get($appType, 'id') ? 'selected' : '' }}>
+                                {{ data_get($appType, 'name') }}</option>
+                        @endforeach
+                    </select>
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.cliniko_app_type_id')
+                            {{ $message }}
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="block text-gray-700">GHL Pipeline ID</label>
-                    <input type="text" wire:model="form.ghl_pipeline_id"
-                        class="text-black w-full p-2 border rounded">
+                    <label class="block text-gray-700">GoHighLevel Pipeline</label>
+                    <select wire:model.live="form.ghl_pipeline_id" class="text-black border p-2 rounded w-full"
+                        @if (!$form['ghl_api_key']) disabled @endif>
+                        <option value="">GoHighLevel Pipeline</option>
+                        @foreach ($optionGhlPipelines as $k => $pipeline)
+                            <option value="{{ data_get($pipeline, 'id') }}"
+                                wire:key="ghl_pipeline_id-{{ data_get($pipeline, 'id') }}"
+                                {{ $form['ghl_pipeline_id'] == data_get($pipeline, 'id') ? 'selected' : '' }}>
+                                {{ data_get($pipeline, 'name') }}</option>
+                        @endforeach
+                    </select>
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.ghl_pipeline_id')
+                            {{ $message }}
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="block text-gray-700">GHL Pipeline Stage ID</label>
-                    <input type="text" wire:model="form.ghl_pipeline_stage_id"
-                        class="text-black w-full p-2 border rounded">
+                    <label class="block text-gray-700">GoHighLevel Pipeline Target Stage</label>
+                    <select wire:model="form.ghl_pipeline_stage_id" class="text-black border p-2 rounded w-full"
+                        @if (!$form['ghl_pipeline_id']) disabled @endif>
+                        <option value="">GoHighLevel Pipeline Target Stage</option>
+                        @foreach ($optionGhlPipelineStages as $stage)
+                            <option value="{{ data_get($stage, 'id') }}"
+                                wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
+                                {{ $form['ghl_pipeline_stage_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
+                                {{ data_get($stage, 'name') }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.ghl_pipeline_stage_id')
+                            {{ $message }}
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="flex justify-end mt-4">
