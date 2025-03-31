@@ -33,14 +33,7 @@ class GhlConversionCommand extends Command
         $conversions = ConversionKey::active()->get();
 
         foreach ($conversions as $model) {
-            $service->processConversion(
-                $model->cliniko_api_key,
-                $model->ghl_api_key,
-                $model->cliniko_app_type_id,
-                $model->ghl_pipeline_id,
-                $model->ghl_pipeline_stage_id,
-                $model->company_name,
-            );
+            $service->processConversion($model);
         }
     }
 }

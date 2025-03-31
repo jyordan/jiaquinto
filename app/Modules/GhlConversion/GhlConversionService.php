@@ -2,6 +2,8 @@
 
 namespace App\Modules\GhlConversion;
 
+use App\Models\ConversionKey;
+use App\Models\ConversionLog;
 use App\Modules\Api\ClinikoApi;
 use App\Modules\Api\GoHighLevelApi;
 use Carbon\Carbon;
@@ -14,14 +16,16 @@ class GhlConversionService
         $this->ghlApi = $ghlApi;
     }
 
-    public function processConversion(
-        string $cToken,
-        string $ghlToken,
-        string $appTypeId,
-        string $pipelineId,
-        string $pipelineStageId,
-        string $companyName,
-    ) {
+    public function processConversion(ConversionKey $model)
+    {
+
+        $cToken = $model->cliniko_api_key;
+        $ghlToken = $model->ghl_api_key;
+        $appTypeId = $model->cliniko_app_type_id;
+        $pipelineId = $model->ghl_pipeline_id;
+        $pipelineStageId = $model->ghl_pipeline_stage_id;
+        $companyName = $model->company_name;
+
         $this->clinikoApi->setToken($cToken);
         $this->ghlApi->setToken($ghlToken);
 
@@ -51,7 +55,18 @@ class GhlConversionService
                 'contactPhone',
                 'contactEmail',
             ));
-            // logger('Converted Opportunity JSON', [json_encode($data)]);
+
+            $model->conversionLogs()->create([
+                'source' => $source,
+                'opportunity_id' => $opportunityId,
+                'patient_id' => $patientId,
+                'patient_name' => $patientName,
+                'patient_phone' => $patientPhone,
+                'patient_email' => $patientEmail,
+                'contact_name' => $contactName,
+                'contact_phone' => $contactPhone,
+                'contact_email' => $contactEmail,
+            ]);
         }
     }
 
