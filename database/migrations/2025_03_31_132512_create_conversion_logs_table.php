@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('source')->nullable();
             $table->string('opportunity_id')->nullable();
             $table->string('patient_id')->nullable();
-            $table->string('patient_name')->nullable();
-            $table->string('patient_phone')->nullable();
-            $table->string('patient_email')->nullable();
-            $table->string('contact_name')->nullable();
-            $table->string('contact_phone')->nullable();
-            $table->string('contact_email')->nullable();
+            $table->string('patient_name')->nullable()->index();
+            $table->string('patient_phone')->nullable()->index();
+            $table->string('patient_email')->nullable()->index();
+            $table->string('contact_name')->nullable()->index();
+            $table->string('contact_phone')->nullable()->index();
+            $table->string('contact_email')->nullable()->index();
             $table->timestamps();
         });
     }

@@ -28,7 +28,8 @@ class ConversionLogsTable extends Component
             ->when($this->search, function ($query) {
                 $query->where('patient_name', 'like', "%{$this->search}%")
                     ->orWhere('patient_email', 'like', "%{$this->search}%")
-                    ->orWhere('contact_email', 'like', "%{$this->search}%");
+                    ->orWhere('contact_email', 'like', "%{$this->search}%")
+                    ->orWhere('contact_name', 'like', "%{$this->search}%");
             })
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);

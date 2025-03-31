@@ -2,7 +2,7 @@
     <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Conversion Logs Table</h2>
 
     <!-- Search Bar -->
-    <input type="text" wire:model="search"
+    <input type="text" wire:model.live="search"
         class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded w-full mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         placeholder="Search by patient name, email, or contact email...">
 
