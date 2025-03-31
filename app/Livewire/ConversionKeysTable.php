@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Models\ConversionKey; // Ensure this matches your model name
 use App\Modules\Api\ClinikoApi;
 use App\Modules\Api\GoHighLevelApi;
-use Illuminate\Support\Arr;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -114,7 +113,11 @@ class ConversionKeysTable extends Component
         $cliniko = new ClinikoApi;
         $cliniko->setToken($token);
         $appTypes = $cliniko->request('appointment_types');
-        return data_get($appTypes, 'appointment_types', []);
+
+        return collect(data_get($appTypes, 'appointment_types', []))
+            ->sortBy('name')
+            ->values()
+            ->toArray();
     }
 
     protected function getGhlPipelines(string|null $token): array
@@ -124,7 +127,11 @@ class ConversionKeysTable extends Component
         $ghl = new GoHighLevelApi;
         $ghl->setToken($token);
         $pipelines = $ghl->request('pipelines');
-        return data_get($pipelines, 'pipelines', []);
+
+        return collect(data_get($pipelines, 'pipelines', []))
+            ->sortBy('name')
+            ->values()
+            ->toArray();
     }
 
     protected function getGhlPipelineStages(string|null $pipelineId): array

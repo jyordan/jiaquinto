@@ -169,7 +169,7 @@
                 <div class="mb-3">
                     <input type="checkbox" id="form-active_at" wire:model="form.active_at"
                         class="w-4 h-4 text-blue-600  border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2  dark:border-gray-600"
-                        {{ $form['active_at'] ? 'checked' : '' }}>
+                        {{ !!$form['active_at'] ? 'checked' : '' }}>
                     <label for="form-active_at" class="ms-2 text-sm font-medium">Active</label>
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.active_at')
