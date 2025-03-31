@@ -127,7 +127,7 @@
 
                 <div class="mb-3">
                     <label class="block" for="form-ghl_pipeline_id">GoHighLevel Pipeline</label>
-                    <select wire:model="form.ghl_pipeline_id" id="form-ghl_pipeline_id"
+                    <select wire:model.live="form.ghl_pipeline_id" id="form-ghl_pipeline_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['ghl_api_key']) disabled @endif>
                         <option value="">GoHighLevel Pipeline</option>
