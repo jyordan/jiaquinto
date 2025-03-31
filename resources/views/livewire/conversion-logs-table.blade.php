@@ -20,6 +20,7 @@
                     <th class="border border-gray-300 dark:border-gray-600 p-2">Contact Name</th>
                     <th class="border border-gray-300 dark:border-gray-600 p-2">Contact Phone</th>
                     <th class="border border-gray-300 dark:border-gray-600 p-2">Contact Email</th>
+                    <th class="border border-gray-300 dark:border-gray-600 p-2">Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,7 @@
                         <td class="border border-gray-300 dark:border-gray-600 p-2">{{ $log->contact_name }}</td>
                         <td class="border border-gray-300 dark:border-gray-600 p-2">{{ $log->contact_phone }}</td>
                         <td class="border border-gray-300 dark:border-gray-600 p-2">{{ $log->contact_email }}</td>
+                        <td class="border border-gray-300 dark:border-gray-600 p-2">{{ $log->created_at }}</td>
                     </tr>
                 @empty
                     <tr>
