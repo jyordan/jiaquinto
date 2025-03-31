@@ -29,6 +29,7 @@ abstract class BaseApi
         if ($method === 'get') {
             // Generate a unique cache key
             $cacheKey = $this->getCacheKey([$any, $request, $method]);
+            if (app()->environment('local')) Cache::forget($cacheKey);
 
             return Cache::remember($cacheKey, now()->addMinutes(5), function () use ($apiUrl, $method, $data) {
                 return $this->makeRequest($apiUrl, $method, $data);
@@ -45,7 +46,11 @@ abstract class BaseApi
 
         try {
             // Perform the HTTP request
-            $response = $pendingRequest->{$method}($apiUrl, $data);
+            if (!$data) {
+                $response = $pendingRequest->{$method}($apiUrl);
+            } else {
+                $response = $pendingRequest->{$method}($apiUrl, $data);
+            }
             return json_decode($response->body(), true) ?: [];
         } catch (\Throwable $th) {
             return [];
@@ -70,6 +75,7 @@ abstract class BaseApi
 
     protected function getUrl(string $any): string
     {
+        if (str_contains($any, 'https://')) return $any;
         return $this->baseUrl . $any;
     }
 
