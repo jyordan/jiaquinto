@@ -34,6 +34,11 @@ class ConversionKey extends Model
         );
     }
 
+    public function conversionLogs()
+    {
+        return $this->hasMany(ConversionLog::class, 'conversion_id');
+    }
+
     protected function ghlPipelineStageName(): Attribute
     {
         return Attribute::make(
