@@ -50,6 +50,8 @@
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
                         {{ $key->active_at ? 'Enable' : 'Disable' }}</td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                        <button wire:click="openLogsModal({{ $key->id }})"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">Logs</button>
                         <button wire:click="openModal({{ $key->id }})"
                             class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">Edit</button>
                         <button wire:click="confirmDelete({{ $key->id }})"
@@ -206,4 +208,16 @@
             </div>
         </div>
     </div>
+
+    @if ($showLogsModal)
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-lg w-3/3">
+                @livewire('conversion-logs-table', ['conversionId' => $selectedConversionId])
+
+                <button wire:click="closeLogsModal"
+                    class="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Close</button>
+            </div>
+        </div>
+    @endif
+
 </div>

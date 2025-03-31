@@ -14,8 +14,10 @@ class ConversionKeysTable extends Component
 
     public $conversionKeyId;
     public $showModal = false;
+    public $showLogsModal = false;
     public $showDeleteModal = false;
     public $deleteId = null; // Store the ID for confirmation
+    public $selectedConversionId;
 
     public $optionGhlPipelines = [];
     public $optionGhlPipelineStages = [];
@@ -84,6 +86,17 @@ class ConversionKeysTable extends Component
     {
         $this->showModal = false;
         $this->showDeleteModal = false;
+    }
+
+    public function openLogsModal($conversionId)
+    {
+        $this->selectedConversionId = $conversionId;
+        $this->showLogsModal = true;
+    }
+
+    public function closeLogsModal()
+    {
+        $this->showLogsModal = false;
     }
 
     public function resetInputFields()
