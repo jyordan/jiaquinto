@@ -39,7 +39,6 @@ class ConversionKeysTable extends Component
         'form.cliniko_app_type_id' => 'required|string',
         'form.ghl_pipeline_id' => 'required|string',
         'form.ghl_pipeline_stage_id' => 'required|string',
-        'form.active_at' => 'boolean',
     ];
 
     public function updatedFormClinikoApiKey()

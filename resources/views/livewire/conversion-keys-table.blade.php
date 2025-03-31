@@ -73,8 +73,8 @@
             <!-- Form -->
             <form wire:submit.prevent="save">
                 <div class="mb-3">
-                    <label class="block">Company Name</label>
-                    <input type="text" wire:model.live="form.company_name"
+                    <label class="block" for="form-company_name">Company Name</label>
+                    <input type="text" wire:model.live="form.company_name" id="form-company_name"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600">
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.company_name')
@@ -84,8 +84,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block">Cliniko API Key</label>
-                    <input type="text" wire:model.live="form.cliniko_api_key"
+                    <label class="block" for="form-cliniko_api_key">Cliniko API Key</label>
+                    <input type="text" wire:model.live="form.cliniko_api_key" id="form-cliniko_api_key"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600">
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.cliniko_api_key')
@@ -95,8 +95,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block">GoHighLevel API Key</label>
-                    <input type="text" wire:model.live="form.ghl_api_key"
+                    <label class="block" for="form-ghl_api_key">GoHighLevel API Key</label>
+                    <input type="text" wire:model.live="form.ghl_api_key" id="form-ghl_api_key"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600">
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.ghl_api_key')
@@ -106,8 +106,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block">Cliniko App Type</label>
-                    <select wire:model.live="form.cliniko_app_type_id"
+                    <label class="block" for="form-cliniko_app_type_id">Cliniko App Type</label>
+                    <select wire:model="form.cliniko_app_type_id" id="form-cliniko_app_type_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['cliniko_api_key']) disabled @endif>
                         <option value="">Cliniko App Type</option>
@@ -126,8 +126,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block">GoHighLevel Pipeline</label>
-                    <select wire:model.live="form.ghl_pipeline_id"
+                    <label class="block" for="form-ghl_pipeline_id">GoHighLevel Pipeline</label>
+                    <select wire:model="form.ghl_pipeline_id" id="form-ghl_pipeline_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['ghl_api_key']) disabled @endif>
                         <option value="">GoHighLevel Pipeline</option>
@@ -146,8 +146,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block">GoHighLevel Pipeline Target Stage</label>
-                    <select wire:model="form.ghl_pipeline_stage_id"
+                    <label class="block" for="form-ghl_pipeline_stage_id">GoHighLevel Pipeline Target Stage</label>
+                    <select wire:model="form.ghl_pipeline_stage_id" id="form-ghl_pipeline_stage_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['ghl_pipeline_id']) disabled @endif>
                         <option value="">GoHighLevel Pipeline Target Stage</option>
@@ -167,10 +167,19 @@
                 </div>
 
                 <div class="mb-3">
-                    <input type="checkbox" wire:model="form.active_at"
+                    <input type="checkbox" id="form-active_at" wire:model="form.active_at"
                         class="w-4 h-4 text-blue-600  border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2  dark:border-gray-600"
                         {{ $form['active_at'] ? 'checked' : '' }}>
-                    <label for="default-checkbox" class="ms-2 text-sm font-medium">Active</label>
+                    <label for="form-active_at" class="ms-2 text-sm font-medium">Active</label>
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.active_at')
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-4">
+                    <span wire:loading>Updating...</span>
                 </div>
 
                 <div class="flex justify-end mt-4">
