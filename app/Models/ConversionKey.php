@@ -30,6 +30,7 @@ class ConversionKey extends Model
     protected function activeAt(): Attribute
     {
         return Attribute::make(
+            get: fn($value) => !!$value,
             set: fn($value) => $value ? now() : null,
         );
     }

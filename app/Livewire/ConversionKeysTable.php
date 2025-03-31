@@ -30,7 +30,7 @@ class ConversionKeysTable extends Component
         'cliniko_app_type_id' => '',
         'ghl_pipeline_id' => '',
         'ghl_pipeline_stage_id' => '',
-        'active_at' => true,
+        'active_at' => false,
     ];
 
     protected $rules = [
@@ -164,6 +164,9 @@ class ConversionKeysTable extends Component
         $this->validate();
 
         ConversionKey::updateOrCreate(['id' => $this->conversionKeyId], $this->form);
+        $model = ConversionKey::find($this->conversionKeyId);
+        $model->active_at = $this->form['active_at'];
+        $model->save();
 
         session()->flash('message', $this->conversionKeyId ? 'Updated Successfully' : 'Created Successfully');
 
