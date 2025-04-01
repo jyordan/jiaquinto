@@ -54,6 +54,26 @@ class ConversionKey extends Model
         );
     }
 
+    protected function ghlPipelineStageSourceCount(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, array $attributes) {
+                $opportunities = $this->fetchOpportunities($attributes, 'ghl_pipeline_stage_source_id');
+                return count($opportunities);
+            },
+        );
+    }
+
+    protected function ghlPipelineStageTargetCount(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, array $attributes) {
+                $opportunities = $this->fetchOpportunities($attributes, 'ghl_pipeline_stage_target_id');
+                return count($opportunities);
+            },
+        );
+    }
+
     protected function ghlPipelineStageTargetName(): Attribute
     {
         return Attribute::make(
@@ -105,6 +125,21 @@ class ConversionKey extends Model
             ->where('id', $attributes['ghl_pipeline_id'])
             ->first();
         return $pipeline ?: [];
+    }
+
+    protected function fetchOpportunities(array $attributes, string $stageIdKey): array
+    {
+        $stageId = $attributes[$stageIdKey];
+        if (!$attributes['ghl_api_key'] || !$attributes['ghl_pipeline_id'] || !$stageId) return [];
+
+        $ghl = new GoHighLevelApi;
+        $ghl->setToken($attributes['ghl_api_key']);
+
+        $pipelineId = $attributes['ghl_pipeline_id'];
+        $opportunities = $ghl->request('pipelines/' . $pipelineId . '/opportunities', compact('stageId'));
+
+        return collect(data_get($opportunities, 'opportunities', []))
+            ->toArray();
     }
 
     /**

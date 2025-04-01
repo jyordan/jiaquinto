@@ -24,6 +24,10 @@
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel Pipeline</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel Pipeline Stage Source</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel Pipeline Stage Target</th>
+                <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Lead
+                    Count</th>
+                <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Customer
+                    Count</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Status</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Actions</th>
             </tr>
@@ -50,6 +54,10 @@
                         {{ $key->ghl_pipeline_stage_source_name }}</td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
                         {{ $key->ghl_pipeline_stage_target_name }}</td>
+                    <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                        {{ $key->ghl_pipeline_stage_source_count }}</td>
+                    <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                        {{ $key->ghl_pipeline_stage_target_count }}</td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
                         {{ $key->active_at ? 'Enable' : 'Disable' }}</td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
