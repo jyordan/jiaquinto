@@ -39,12 +39,12 @@
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2 text-wrap">{{ $key->company_name }}
                     </td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2 text-wrap">
-                        <div class="overflow-hidden whitespace-nowrap text-ellipsis" style="width: 200px">
+                        <div class="overflow-hidden whitespace-nowrap text-ellipsis" style="width: 100px">
                             {{ $key->cliniko_api_key }}
                         </div>
                     </td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2 text-wrap">
-                        <div class="overflow-hidden whitespace-nowrap text-ellipsis" style="width: 200px">
+                        <div class="overflow-hidden whitespace-nowrap text-ellipsis" style="width: 100px">
                             {{ $key->ghl_api_key }}</div>
                     </td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">{{ $key->cliniko_app_type_name }}
@@ -245,11 +245,20 @@
 
     @if ($showLogsModal)
         <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-            <div class="bg-white dark:bg-gray-900 p-6 rounded-lg w-3/3">
-                @livewire('conversion-logs-table', ['conversionId' => $selectedConversionId])
+            <div
+                class="bg-white dark:bg-gray-900 p-6 w-full h-full max-w-full max-h-full overflow-auto flex flex-col">
+                <!-- Close button -->
+                <div class="flex justify-end w-full mb-4">
+                    <button wire:click="closeLogsModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
-                <button wire:click="closeLogsModal"
-                    class="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Close</button>
+                <!-- Modal content -->
+                @livewire('conversion-logs-table', ['conversionId' => $selectedConversionId])
             </div>
         </div>
     @endif

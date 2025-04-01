@@ -1,5 +1,6 @@
 <div class="p-6 bg-white dark:bg-gray-800 shadow-md rounded">
-    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Conversion Logs Table</h2>
+    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">{{ $conversion->company_name }} Conversion Logs
+        Table ({{ $logs->count() }})</h2>
 
     <!-- Search Bar -->
     <input type="text" wire:model.live="search"

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\ConversionKey;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ConversionLog; // Assuming there's a model
@@ -11,6 +12,7 @@ class ConversionLogsTable extends Component
     use WithPagination;
 
     public $conversionId; // Capture conversion_id
+    public $conversion;
     public $search = ''; // For filtering logs
     public $perPage = 10; // Pagination size
 
@@ -19,6 +21,7 @@ class ConversionLogsTable extends Component
     public function mount($conversionId)
     {
         $this->conversionId = $conversionId;
+        $this->conversion = ConversionKey::findOrFail($conversionId);
     }
 
     public function render()
