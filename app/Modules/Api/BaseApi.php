@@ -76,7 +76,12 @@ abstract class BaseApi
     protected function getUrl(string $any): string
     {
         if (str_contains($any, 'https://')) return $any;
-        return $this->baseUrl . $any;
+        return $this->getBaseUrl() . $any;
+    }
+
+    protected function getBaseUrl()
+    {
+        return $this->baseUrl;
     }
 
     protected function getData(array $data, string $method): array|null

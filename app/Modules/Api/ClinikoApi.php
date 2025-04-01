@@ -20,4 +20,12 @@ class ClinikoApi extends BaseApi
         if ($method == 'get' && !$data) return  null;
         return $data;
     }
+
+    protected function getBaseUrl()
+    {
+        $segments = explode('-', $this->token);
+        $region = last($segments) ?: 'au1';
+        $baseUrl = 'https://api.au1.cliniko.com/v1/';
+        return str_replace('au1', $region, $baseUrl);
+    }
 }
