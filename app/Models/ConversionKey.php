@@ -21,7 +21,8 @@ class ConversionKey extends Model
         'ghl_api_key',
         'cliniko_app_type_id',
         'ghl_pipeline_id',
-        'ghl_pipeline_stage_id',
+        'ghl_pipeline_stage_source_id',
+        'ghl_pipeline_stage_target_id',
         'active_at',
     ];
 
@@ -40,13 +41,26 @@ class ConversionKey extends Model
         return $this->hasMany(ConversionLog::class, 'conversion_id');
     }
 
-    protected function ghlPipelineStageName(): Attribute
+    protected function ghlPipelineStageSourceName(): Attribute
     {
         return Attribute::make(
             get: function ($value, array $attributes) {
                 $pipeline = $this->fetchPipeline($attributes);
                 $stage = collect(data_get($pipeline, 'stages', []))
-                    ->where('id', $attributes['ghl_pipeline_stage_id'])
+                    ->where('id', $attributes['ghl_pipeline_stage_source_id'])
+                    ->first();
+                return data_get($stage ?: [], 'name', '');
+            },
+        );
+    }
+
+    protected function ghlPipelineStageTargetName(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, array $attributes) {
+                $pipeline = $this->fetchPipeline($attributes);
+                $stage = collect(data_get($pipeline, 'stages', []))
+                    ->where('id', $attributes['ghl_pipeline_stage_target_id'])
                     ->first();
                 return data_get($stage ?: [], 'name', '');
             },

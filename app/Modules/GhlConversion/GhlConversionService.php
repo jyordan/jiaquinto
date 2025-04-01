@@ -18,12 +18,11 @@ class GhlConversionService
 
     public function processConversion(ConversionKey $model)
     {
-
         $cToken = $model->cliniko_api_key;
         $ghlToken = $model->ghl_api_key;
         $appTypeId = $model->cliniko_app_type_id;
         $pipelineId = $model->ghl_pipeline_id;
-        $pipelineStageId = $model->ghl_pipeline_stage_id;
+        $pipelineStageId = $model->ghl_pipeline_stage_target_id;
         $companyName = $model->company_name;
 
         $this->clinikoApi->setToken($cToken);

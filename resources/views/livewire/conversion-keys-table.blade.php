@@ -1,4 +1,4 @@
-<div class="container mx-auto p-6 text-gray-700 dark:text-gray-300">
+<div class="w-full mx-auto p-6 text-gray-700 dark:text-gray-300 overflow-auto">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Conversion Keys</h2>
         <button wire:click="openModal" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
@@ -22,7 +22,8 @@
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel API Key</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Cliniko App Type</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel Pipeline</th>
-                <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel Pipeline Target Stage</th>
+                <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel Pipeline Stage Source</th>
+                <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">GoHighLevel Pipeline Stage Target</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Status</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Actions</th>
             </tr>
@@ -46,7 +47,9 @@
                     </td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">{{ $key->ghl_pipeline_name }}</td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
-                        {{ $key->ghl_pipeline_stage_name }}</td>
+                        {{ $key->ghl_pipeline_stage_source_name }}</td>
+                    <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                        {{ $key->ghl_pipeline_stage_target_name }}</td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
                         {{ $key->active_at ? 'Enable' : 'Disable' }}</td>
                     <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
@@ -148,21 +151,44 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="block" for="form-ghl_pipeline_stage_id">GoHighLevel Pipeline Target Stage</label>
-                    <select wire:model="form.ghl_pipeline_stage_id" id="form-ghl_pipeline_stage_id"
+                    <label class="block" for="form-ghl_pipeline_stage_source_id">GoHighLevel Pipeline Stage Source
+                        (Lead)</label>
+                    <select wire:model="form.ghl_pipeline_stage_source_id" id="form-ghl_pipeline_stage_source_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['ghl_pipeline_id']) disabled @endif>
                         <option value="">GoHighLevel Pipeline Target Stage</option>
                         @foreach ($optionGhlPipelineStages as $stage)
                             <option value="{{ data_get($stage, 'id') }}"
                                 wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
-                                {{ $form['ghl_pipeline_stage_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
+                                {{ $form['ghl_pipeline_stage_source_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
                                 {{ data_get($stage, 'name') }}
                             </option>
                         @endforeach
                     </select>
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
-                        @error('form.ghl_pipeline_stage_id')
+                        @error('form.ghl_pipeline_stage_source_id')
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block" for="form-ghl_pipeline_stage_target_id">GoHighLevel Pipeline Stage Target
+                        (Customer)</label>
+                    <select wire:model="form.ghl_pipeline_stage_target_id" id="form-ghl_pipeline_stage_target_id"
+                        class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                        @if (!$form['ghl_pipeline_id']) disabled @endif>
+                        <option value="">GoHighLevel Pipeline Target Stage</option>
+                        @foreach ($optionGhlPipelineStages as $stage)
+                            <option value="{{ data_get($stage, 'id') }}"
+                                wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
+                                {{ $form['ghl_pipeline_stage_target_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
+                                {{ data_get($stage, 'name') }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
+                        @error('form.ghl_pipeline_stage_target_id')
                             {{ $message }}
                         @enderror
                     </div>

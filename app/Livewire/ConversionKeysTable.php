@@ -29,7 +29,8 @@ class ConversionKeysTable extends Component
         'ghl_api_key' => '',
         'cliniko_app_type_id' => '',
         'ghl_pipeline_id' => '',
-        'ghl_pipeline_stage_id' => '',
+        'ghl_pipeline_stage_source_id' => '',
+        'ghl_pipeline_stage_target_id' => '',
         'active_at' => false,
     ];
 
@@ -39,7 +40,8 @@ class ConversionKeysTable extends Component
         'form.ghl_api_key' => 'required|string',
         'form.cliniko_app_type_id' => 'required|string',
         'form.ghl_pipeline_id' => 'required|string',
-        'form.ghl_pipeline_stage_id' => 'required|string',
+        'form.ghl_pipeline_stage_source_id' => 'required|string',
+        'form.ghl_pipeline_stage_target_id' => 'required|string',
     ];
 
     public function updatedFormClinikoApiKey()
@@ -51,7 +53,8 @@ class ConversionKeysTable extends Component
     public function updatedFormGhlApiKey()
     {
         $this->form['ghl_pipeline_id'] = '';
-        $this->form['ghl_pipeline_stage_id'] = '';
+        $this->form['ghl_pipeline_stage_source_id'] = '';
+        $this->form['ghl_pipeline_stage_target_id'] = '';
 
         $this->optionGhlPipelines = $this->getGhlPipelines($this->form['ghl_api_key']);
         $this->optionGhlPipelineStages = [];
@@ -59,7 +62,8 @@ class ConversionKeysTable extends Component
 
     public function updatedFormGhlPipelineId()
     {
-        $this->form['ghl_pipeline_stage_id'] = '';
+        $this->form['ghl_pipeline_stage_source_id'] = '';
+        $this->form['ghl_pipeline_stage_target_id'] = '';
         $this->optionGhlPipelineStages = $this->getGhlPipelineStages($this->form['ghl_pipeline_id']);
     }
 
