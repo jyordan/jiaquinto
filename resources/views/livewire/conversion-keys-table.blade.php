@@ -12,6 +12,12 @@
         </div>
     @endif
 
+    @if (app()->environment('local'))
+        <div class="flex justify-center mt-4">
+            <span wire:loading>Loading...</span>
+        </div>
+    @endif
+
     <!-- Table -->
     <table class="w-full border-collapse border border-gray-300 dark:border-gray-700">
         <thead>
@@ -123,7 +129,7 @@
                     <select wire:model="form.cliniko_app_type_id" id="form-cliniko_app_type_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['cliniko_api_key']) disabled @endif>
-                        <option value="">Cliniko App Type</option>
+                        <option value="" disabled>Choose Cliniko App Type</option>
                         @foreach ($optionClinikoAppTypes as $k => $appType)
                             <option value="{{ data_get($appType, 'id') }}"
                                 wire:key="cliniko_app_type_id-{{ data_get($appType, 'id') }}"
@@ -143,7 +149,7 @@
                     <select wire:model.live="form.ghl_pipeline_id" id="form-ghl_pipeline_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['ghl_api_key']) disabled @endif>
-                        <option value="">GoHighLevel Pipeline</option>
+                        <option value="" disabled>Choose GoHighLevel Pipeline</option>
                         @foreach ($optionGhlPipelines as $k => $pipeline)
                             <option value="{{ data_get($pipeline, 'id') }}"
                                 wire:key="ghl_pipeline_id-{{ data_get($pipeline, 'id') }}"
@@ -164,7 +170,7 @@
                     <select wire:model="form.ghl_pipeline_stage_source_id" id="form-ghl_pipeline_stage_source_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['ghl_pipeline_id']) disabled @endif>
-                        <option value="">GoHighLevel Pipeline Target Stage</option>
+                        <option value="" disabled>Choose GoHighLevel Pipeline Target Stage</option>
                         @foreach ($optionGhlPipelineStages as $stage)
                             <option value="{{ data_get($stage, 'id') }}"
                                 wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
@@ -186,7 +192,7 @@
                     <select wire:model="form.ghl_pipeline_stage_target_id" id="form-ghl_pipeline_stage_target_id"
                         class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
                         @if (!$form['ghl_pipeline_id']) disabled @endif>
-                        <option value="">GoHighLevel Pipeline Target Stage</option>
+                        <option value="" disabled>Choose GoHighLevel Pipeline Target Stage</option>
                         @foreach ($optionGhlPipelineStages as $stage)
                             <option value="{{ data_get($stage, 'id') }}"
                                 wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
@@ -245,8 +251,7 @@
 
     @if ($showLogsModal)
         <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-            <div
-                class="bg-white dark:bg-gray-900 p-6 w-full h-full max-w-full max-h-full overflow-auto flex flex-col">
+            <div class="bg-white dark:bg-gray-900 p-6 w-full h-full max-w-full max-h-full overflow-auto flex flex-col">
                 <!-- Close button -->
                 <div class="flex justify-end w-full mb-4">
                     <button wire:click="closeLogsModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
