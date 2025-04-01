@@ -28,7 +28,7 @@ abstract class BaseApi
         // Cache only if method is GET
         if ($method === 'get') {
             // Generate a unique cache key
-            $cacheKey = $this->getCacheKey([$any, $request, $method]);
+            $cacheKey = $this->getCacheKey([$any, $request, $method, $this->getToken()]);
             if (app()->environment('local')) Cache::forget($cacheKey);
 
             return Cache::remember($cacheKey, now()->addMinutes(5), function () use ($apiUrl, $method, $data) {
