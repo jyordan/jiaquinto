@@ -69,6 +69,7 @@ class ConversionKeysTable extends Component
 
     public function openModal($id = null)
     {
+        $this->resetValidation();
         $this->resetInputFields();
 
         if ($id) {
