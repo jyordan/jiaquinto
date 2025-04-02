@@ -126,17 +126,27 @@
 
                 <div class="mb-3">
                     <label class="block" for="form-cliniko_app_type_id">Cliniko App Type</label>
-                    <select wire:model="form.cliniko_app_type_id" id="form-cliniko_app_type_id"
-                        class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
-                        @if (!$form['cliniko_api_key']) disabled @endif>
-                        <option value="" disabled>Choose Cliniko App Type</option>
-                        @foreach ($optionClinikoAppTypes as $k => $appType)
-                            <option value="{{ data_get($appType, 'id') }}"
-                                wire:key="cliniko_app_type_id-{{ data_get($appType, 'id') }}"
-                                {{ $form['cliniko_app_type_id'] == data_get($appType, 'id') ? 'selected' : '' }}>
-                                {{ data_get($appType, 'name') }}</option>
-                        @endforeach
-                    </select>
+                    @if ($optionClinikoAppTypes)
+                        <select wire:model="form.cliniko_app_type_id" id="form-cliniko_app_type_id"
+                            class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                            <option value="" disabled>Choose Cliniko App Type</option>
+                            @foreach ($optionClinikoAppTypes as $k => $appType)
+                                <option value="{{ data_get($appType, 'id') }}"
+                                    wire:key="cliniko_app_type_id-{{ data_get($appType, 'id') }}"
+                                    {{ $form['cliniko_app_type_id'] == data_get($appType, 'id') ? 'selected' : '' }}>
+                                    {{ data_get($appType, 'name') }}</option>
+                            @endforeach
+                        </select>
+                    @else
+                        <span
+                            class="w-full block px-2 py-1 border border-gray-300 bg-gray-100 text-gray-500 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400">
+                            @if ($form['cliniko_api_key'])
+                                Invalid Cliniko API Key
+                            @else
+                                No Cliniko API Key
+                            @endif
+                        </span>
+                    @endif
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.cliniko_app_type_id')
                             {{ $message }}
@@ -146,17 +156,28 @@
 
                 <div class="mb-3">
                     <label class="block" for="form-ghl_pipeline_id">GoHighLevel Pipeline</label>
-                    <select wire:model.live="form.ghl_pipeline_id" id="form-ghl_pipeline_id"
-                        class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
-                        @if (!$form['ghl_api_key']) disabled @endif>
-                        <option value="" disabled>Choose GoHighLevel Pipeline</option>
-                        @foreach ($optionGhlPipelines as $k => $pipeline)
-                            <option value="{{ data_get($pipeline, 'id') }}"
-                                wire:key="ghl_pipeline_id-{{ data_get($pipeline, 'id') }}"
-                                {{ $form['ghl_pipeline_id'] == data_get($pipeline, 'id') ? 'selected' : '' }}>
-                                {{ data_get($pipeline, 'name') }}</option>
-                        @endforeach
-                    </select>
+                    @if ($optionGhlPipelines)
+                        <select wire:model.live="form.ghl_pipeline_id" id="form-ghl_pipeline_id"
+                            class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                            @if (!$form['ghl_api_key']) disabled @endif>
+                            <option value="" disabled>Choose GoHighLevel Pipeline</option>
+                            @foreach ($optionGhlPipelines as $k => $pipeline)
+                                <option value="{{ data_get($pipeline, 'id') }}"
+                                    wire:key="ghl_pipeline_id-{{ data_get($pipeline, 'id') }}"
+                                    {{ $form['ghl_pipeline_id'] == data_get($pipeline, 'id') ? 'selected' : '' }}>
+                                    {{ data_get($pipeline, 'name') }}</option>
+                            @endforeach
+                        </select>
+                    @else
+                        <span
+                            class="w-full block px-2 py-1 border border-gray-300 bg-gray-100 text-gray-500 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400">
+                            @if ($form['ghl_api_key'])
+                                Invalid GoHighLevel API Key
+                            @else
+                                No GoHighLevel API Key
+                            @endif
+                        </span>
+                    @endif
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.ghl_pipeline_id')
                             {{ $message }}
@@ -167,18 +188,29 @@
                 <div class="mb-3">
                     <label class="block" for="form-ghl_pipeline_stage_source_id">GoHighLevel Pipeline Stage Source
                         (Lead)</label>
-                    <select wire:model="form.ghl_pipeline_stage_source_id" id="form-ghl_pipeline_stage_source_id"
-                        class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
-                        @if (!$form['ghl_pipeline_id']) disabled @endif>
-                        <option value="" disabled>Choose GoHighLevel Pipeline Target Stage</option>
-                        @foreach ($optionGhlPipelineStages as $stage)
-                            <option value="{{ data_get($stage, 'id') }}"
-                                wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
-                                {{ $form['ghl_pipeline_stage_source_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
-                                {{ data_get($stage, 'name') }}
-                            </option>
-                        @endforeach
-                    </select>
+                    @if ($optionGhlPipelines)
+                        <select wire:model="form.ghl_pipeline_stage_source_id" id="form-ghl_pipeline_stage_source_id"
+                            class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                            @if (!$form['ghl_pipeline_id']) disabled @endif>
+                            <option value="" disabled>Choose GoHighLevel Pipeline Target Stage</option>
+                            @foreach ($optionGhlPipelineStages as $stage)
+                                <option value="{{ data_get($stage, 'id') }}"
+                                    wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
+                                    {{ $form['ghl_pipeline_stage_source_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
+                                    {{ data_get($stage, 'name') }}
+                                </option>
+                            @endforeach
+                        </select>
+                    @else
+                        <span
+                            class="w-full block px-2 py-1 border border-gray-300 bg-gray-100 text-gray-500 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400">
+                            @if ($form['ghl_api_key'])
+                                Invalid GoHighLevel API Key
+                            @else
+                                No GoHighLevel API Key
+                            @endif
+                        </span>
+                    @endif
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.ghl_pipeline_stage_source_id')
                             {{ $message }}
@@ -189,18 +221,29 @@
                 <div class="mb-3">
                     <label class="block" for="form-ghl_pipeline_stage_target_id">GoHighLevel Pipeline Stage Target
                         (Customer)</label>
-                    <select wire:model="form.ghl_pipeline_stage_target_id" id="form-ghl_pipeline_stage_target_id"
-                        class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
-                        @if (!$form['ghl_pipeline_id']) disabled @endif>
-                        <option value="" disabled>Choose GoHighLevel Pipeline Target Stage</option>
-                        @foreach ($optionGhlPipelineStages as $stage)
-                            <option value="{{ data_get($stage, 'id') }}"
-                                wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
-                                {{ $form['ghl_pipeline_stage_target_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
-                                {{ data_get($stage, 'name') }}
-                            </option>
-                        @endforeach
-                    </select>
+                    @if ($optionGhlPipelines)
+                        <select wire:model="form.ghl_pipeline_stage_target_id" id="form-ghl_pipeline_stage_target_id"
+                            class="w-full p-2 border rounded text-gray-900 dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                            @if (!$form['ghl_pipeline_id']) disabled @endif>
+                            <option value="" disabled>Choose GoHighLevel Pipeline Target Stage</option>
+                            @foreach ($optionGhlPipelineStages as $stage)
+                                <option value="{{ data_get($stage, 'id') }}"
+                                    wire:key="pipeline_stage_{{ data_get($stage, 'id') }}"
+                                    {{ $form['ghl_pipeline_stage_target_id'] == data_get($stage, 'id') ? 'selected' : '' }}>
+                                    {{ data_get($stage, 'name') }}
+                                </option>
+                            @endforeach
+                        </select>
+                    @else
+                        <span
+                            class="w-full block px-2 py-1 border border-gray-300 bg-gray-100 text-gray-500 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400">
+                            @if ($form['ghl_api_key'])
+                                Invalid GoHighLevel API Key
+                            @else
+                                No GoHighLevel API Key
+                            @endif
+                        </span>
+                    @endif
                     <div class="mb-4 text-sm text-red-800 dark:text-red-400" role="alert">
                         @error('form.ghl_pipeline_stage_target_id')
                             {{ $message }}
