@@ -76,7 +76,7 @@
 
     <!-- Loader -->
     <div wire:loading class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div class="bg-white dark:bg-gray-900 p-6 w-1/4 max-w-md rounded-lg shadow-lg relative">
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg w-1/3">
             <span>Updating...</span>
         </div>
     </div>
