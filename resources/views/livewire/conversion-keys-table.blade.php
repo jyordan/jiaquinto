@@ -21,7 +21,7 @@
     <!-- Table -->
     <table class="w-full border-collapse border border-gray-300 dark:border-gray-700">
         <thead>
-            <tr class="bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+            <tr class="bg-gray-200 dark:bg-gray-700 ">
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">ID</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Company Name</th>
                 <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Cliniko API Key</th>
