@@ -75,9 +75,11 @@
     @endif
 
     <!-- Loader -->
-    <div wire:loading class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div class="bg-white dark:bg-gray-900 p-6 rounded-lg w-1/3">
-            <span>Updating...</span>
+    <div wire:loading>
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-lg w-1/3">
+                <span>Updating...</span>
+            </div>
         </div>
     </div>
 </div>
