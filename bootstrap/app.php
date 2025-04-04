@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AppSetting;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,7 +18,16 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('app:cliniko-monitor-command')
-            ->everyFiveMinutes();
+            ->everyFiveMinutes()
+            ->when(function () {
+                return AppSetting::where('key', 'phase-2')->value('value') != 1;
+            });
+
+        $schedule->command('app:ghl-conversion-command')
+            ->everyFiveMinutes()
+            ->when(function () {
+                return AppSetting::where('key', 'phase-2')->value('value') == 1;
+            });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
