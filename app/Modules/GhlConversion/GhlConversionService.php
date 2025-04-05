@@ -31,10 +31,12 @@ class GhlConversionService
         $appointments = $this->getNewAppointments($appTypeId);
         $newData = $this->processAppointments($appointments, $pipelineId, $pipelineStageId);
         foreach ($newData as $data) {
-            $contact = data_get($data, 'opportunity.contact', []);
-            $source = data_get($data, 'opportunity.source');
-            $opportunityId = data_get($data, 'opportunity.id');
+            $appointmentId = data_get($data, 'appointment.id');
             $patientId = data_get($data, 'patient.id');
+            $contactId = data_get($data, 'contact.id');
+            $source = data_get($data, 'opportunity.source');
+            $contact = data_get($data, 'opportunity.contact', []);
+            $opportunityId = data_get($data, 'opportunity.id');
             $patientName = data_get($data, 'patient.first_name') . ' ' . data_get($data, 'patient.last_name');
             $patientPhone = data_get($data, 'patient.patient_phone_numbers.0.normalized_number');
             $patientEmail = data_get($data, 'patient.email');
@@ -43,10 +45,12 @@ class GhlConversionService
             $contactEmail = data_get($contact, 'email');
 
             logger('Converted Opportunity', compact(
-                'companyName',
-                'source',
+                'appointmentId',
                 'opportunityId',
                 'patientId',
+                'contactId',
+                'companyName',
+                'source',
                 'patientName',
                 'patientPhone',
                 'patientEmail',
@@ -56,9 +60,11 @@ class GhlConversionService
             ));
 
             $model->conversionLogs()->create([
-                'source' => $source,
+                'appointment_id' => $appointmentId,
                 'opportunity_id' => $opportunityId,
+                'contact_id' => $contactId ?: '',
                 'patient_id' => $patientId,
+                'source' => $source,
                 'patient_name' => $patientName,
                 'patient_phone' => $patientPhone,
                 'patient_email' => $patientEmail,
