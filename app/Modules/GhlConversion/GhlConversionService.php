@@ -80,7 +80,7 @@ class GhlConversionService
         $formattedDate = Carbon::now()->subHour()->toIso8601ZuluString();
 
         if (app()->environment('local')) {
-            $formattedDate = Carbon::now()->subDays(30)->toIso8601ZuluString();
+            $formattedDate = Carbon::now()->subDays(90)->toIso8601ZuluString();
         }
 
         $params = [
@@ -103,14 +103,15 @@ class GhlConversionService
             ->toArray();
     }
 
-    protected function processAppointments(array $list, $pipelineId, $pipelineStageId)
+    protected function processAppointments(array $appList, $pipelineId, $pipelineStageId)
     {
         $results = [];
-        foreach ($list as $cliniko) {
-            $query = data_get($cliniko, 'patient.email');
+        foreach ($appList as $cliniko) {
+            $search = $this->searchOpportunity($pipelineId, $cliniko);
+            dump($search);
 
-            $opportunity = head($this->getOpportunities($query, $pipelineId));
-            $contact = head($this->getContacts($query));
+            $opportunity = data_get($search, 'opportunity', []);
+            $contact = data_get($search, 'contact', []);
             $isMoved = false;
 
             if (!$opportunity) {
@@ -196,5 +197,37 @@ class GhlConversionService
     {
         $contacts = $this->ghlApi->request("contacts", compact('query'));
         return data_get($contacts, 'contacts', []);
+    }
+
+    protected function searchOpportunity(string $pipelineId, array $cliniko): array
+    {
+        // email matching
+        $query = data_get($cliniko, 'patient.email');
+
+        $match = 'email';
+        $opportunity = head($this->getOpportunities($query, $pipelineId));
+        $contact = head($this->getContacts($query));
+        if ($contact) return compact('opportunity', 'contact', 'match');
+
+        // phone matching
+        if ($phone = data_get($cliniko, 'patient.patient_phone_numbers.0.normalized_number')) {
+            $items = ['first_name', 'last_name'];
+            while (!empty($items)) {
+                $item = array_shift($items); // pops from start
+                $query = data_get($cliniko, "patient.{$item}");
+
+                $match = 'phone';
+                $opportunity = collect($this->getOpportunities($query, $pipelineId))
+                    ->filter(fn(array $item) => str_contains(data_get($item, 'contact.phone'), $phone))
+                    ->first(); // reset keys if needed;
+                $contact = collect($this->getContacts($query))
+                    ->filter(fn(array $item) => str_contains(data_get($item, 'phone'), $phone))
+                    ->first();
+
+                if ($contact) return compact('opportunity', 'contact', 'match');
+            }
+        }
+
+        return [];
     }
 }
