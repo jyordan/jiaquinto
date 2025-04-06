@@ -103,8 +103,7 @@ class ConversionKey extends Model
             get: function ($value, array $attributes) {
                 if (!$attributes['cliniko_api_key'] || !$attributes['cliniko_app_type_id']) return;
 
-                $cliniko = new ClinikoApi;
-                $cliniko->setToken($attributes['cliniko_api_key']);
+                $cliniko = $this->getClinikoApi($attributes['cliniko_api_key']);
                 $result = $cliniko->request('appointment_types');
                 $appTypes = collect(data_get($result, 'appointment_types', []))
                     ->where('id', $attributes['cliniko_app_type_id'])
@@ -118,8 +117,7 @@ class ConversionKey extends Model
     {
         if (!$attributes['ghl_api_key'] || !$attributes['ghl_pipeline_id']) return [];
 
-        $ghl = new GoHighLevelApi;
-        $ghl->setToken($attributes['ghl_api_key']);
+        $ghl = $this->getGoHighLevelApi($attributes['ghl_api_key']);
         $pipelines = $ghl->request('pipelines');
         $pipeline = collect(data_get($pipelines, 'pipelines', []))
             ->where('id', $attributes['ghl_pipeline_id'])
@@ -132,9 +130,7 @@ class ConversionKey extends Model
         $stageId = $attributes[$stageIdKey];
         if (!$attributes['ghl_api_key'] || !$attributes['ghl_pipeline_id'] || !$stageId) return [];
 
-        $ghl = new GoHighLevelApi;
-        $ghl->setToken($attributes['ghl_api_key']);
-
+        $ghl = $this->getGoHighLevelApi($attributes['ghl_api_key']);
         $pipelineId = $attributes['ghl_pipeline_id'];
         $opportunities = $ghl->request('pipelines/' . $pipelineId . '/opportunities', compact('stageId'));
 
@@ -148,5 +144,19 @@ class ConversionKey extends Model
     public function scopeActive(Builder $query): void
     {
         $query->where('active_at', '<=', now());
+    }
+
+    public function getClinikoApi($key = null): ClinikoApi
+    {
+        $cliniko = new ClinikoApi;
+        $cliniko->setToken($key ?: $this->attributes['cliniko_api_key']);
+        return $cliniko;
+    }
+
+    public function getGoHighLevelApi($key = null): GoHighLevelApi
+    {
+        $cliniko = new GoHighLevelApi;
+        $cliniko->setToken($key ?: $this->attributes['ghl_api_key']);
+        return $cliniko;
     }
 }

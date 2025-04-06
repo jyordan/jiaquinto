@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'cliniko_source' => env('CLINIKO_SOURCE', 'Cliniko'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

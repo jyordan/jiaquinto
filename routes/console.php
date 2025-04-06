@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\ConversionKey;
+use App\Models\ConversionLog;
 use App\Modules\Api\ClinikoApi;
 use App\Modules\Api\GoHighLevelApi;
 use Illuminate\Foundation\Inspiring;
@@ -36,4 +38,11 @@ Artisan::command('test-code:api', function () {
     $ghl = new GoHighLevelApi;
     $ghl->setToken(env('GO_HIGH_LEVEL_KEY'));
     $pipelines = $ghl->request('pipelines');
+})->purpose('Test code');
+
+Artisan::command('test-code:logs', function () {
+    $logs = ConversionLog::get();
+    foreach ($logs as $log) {
+        dump($log->toArray());
+    }
 })->purpose('Test code');

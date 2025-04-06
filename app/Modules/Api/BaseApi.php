@@ -21,6 +21,12 @@ abstract class BaseApi
     {
         // Build the full API URL
         $apiUrl = $this->getUrl($any);
+        return $this->requestUrl($apiUrl, $request, $method);
+    }
+
+
+    public function requestUrl(string $apiUrl, array $request = [], string $method = 'get'): array
+    {
         $method = strtolower($method);
 
         $data = $this->getData($request, $method);
@@ -28,7 +34,7 @@ abstract class BaseApi
         // Cache only if method is GET
         if ($method === 'get') {
             // Generate a unique cache key
-            $cacheKey = $this->getCacheKey([$any, $request, $method, $this->getToken()]);
+            $cacheKey = $this->getCacheKey([$apiUrl, $request, $method, $this->getToken()]);
             if (app()->environment('local')) Cache::forget($cacheKey);
 
             return Cache::remember($cacheKey, now()->addMinutes(5), function () use ($apiUrl, $method, $data) {
