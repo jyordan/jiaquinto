@@ -79,10 +79,15 @@ class ConversionLog extends Model
     protected function flowDirection(): Attribute
     {
         $details = $this->api_details;
+        $id = data_get($details, 'opportunity.id');
         $source = data_get($details, 'opportunity.source');
         $direction = 'GHL to Cliniko';
         if (strtolower($source) == strtolower(config('app.cliniko_source'))) {
             $direction = 'Cliniko to GHL';
+        }
+
+        if (!$id) {
+            $direction = '---';
         }
 
         return Attribute::make(

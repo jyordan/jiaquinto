@@ -7,6 +7,7 @@ use App\Models\ConversionLog;
 use App\Modules\Api\ClinikoApi;
 use App\Modules\Api\GoHighLevelApi;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class GhlConversionService
 {
@@ -59,19 +60,24 @@ class GhlConversionService
                 'contactEmail',
             ));
 
-            $model->conversionLogs()->create([
-                'appointment_id' => $appointmentId,
-                'opportunity_id' => $opportunityId,
-                'contact_id' => $contactId ?: '',
-                'patient_id' => $patientId,
-                'source' => $source,
-                'patient_name' => $patientName,
-                'patient_phone' => $patientPhone,
-                'patient_email' => $patientEmail,
-                'contact_name' => $contactName,
-                'contact_phone' => $contactPhone,
-                'contact_email' => $contactEmail,
-            ]);
+            try {
+                $data = [
+                    'appointment_id' => $appointmentId,
+                    'opportunity_id' => $opportunityId,
+                    'contact_id' => $contactId ?: '',
+                    'patient_id' => $patientId,
+                    'source' => $source,
+                    'patient_name' => $patientName,
+                    'patient_phone' => $patientPhone,
+                    'patient_email' => $patientEmail,
+                    'contact_name' => $contactName,
+                    'contact_phone' => $contactPhone,
+                    'contact_email' => $contactEmail,
+                ];
+                $model->conversionLogs()->updateOrCreate(Arr::only($data, ['appointment_id']), $data);
+            } catch (\Throwable $th) {
+                logger()->error($th);
+            }
         }
     }
 
@@ -80,7 +86,7 @@ class GhlConversionService
         $formattedDate = Carbon::now()->subHour()->toIso8601ZuluString();
 
         if (app()->environment('local')) {
-            $formattedDate = Carbon::now()->subDays(90)->toIso8601ZuluString();
+            $formattedDate = Carbon::now()->subDays(150)->toIso8601ZuluString();
         }
 
         $params = [
@@ -108,7 +114,6 @@ class GhlConversionService
         $results = [];
         foreach ($appList as $cliniko) {
             $search = $this->searchOpportunity($pipelineId, $cliniko);
-            dump($search);
 
             $opportunity = data_get($search, 'opportunity', []);
             $contact = data_get($search, 'contact', []);
@@ -195,7 +200,8 @@ class GhlConversionService
 
     protected function getContacts(string $query): array
     {
-        $contacts = $this->ghlApi->request("contacts", compact('query'));
+        $order = 'desc';
+        $contacts = $this->ghlApi->request("contacts", compact('query', 'order'));
         return data_get($contacts, 'contacts', []);
     }
 
