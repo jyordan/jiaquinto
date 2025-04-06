@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Modules\Api\ClinikoApi;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -79,10 +81,30 @@ class ConversionLog extends Model
         $details = $this->api_details;
         $source = data_get($details, 'opportunity.source');
         $direction = 'GHL to Cliniko';
-        if ($source == config('app.cliniko_source')) $direction = 'Cliniko to GHL';
+        if (strtolower($source) == strtolower(config('app.cliniko_source'))) {
+            $direction = 'Cliniko to GHL';
+        }
 
         return Attribute::make(
             get: fn($value, array $attributes) => $direction,
+        );
+    }
+
+    protected function convertedStamp(): Attribute
+    {
+        $details = $this->api_details;
+        $statusChangeAt = data_get($details, 'opportunity.lastStatusChangeAt');
+
+        $dateString = null;
+
+        if ($statusChangeAt) {
+            // Convert to DateTime object (handling the 'Z' as UTC)
+            $date = new DateTime($statusChangeAt, new DateTimeZone("UTC"));
+            $dateString = $date->format("Y-m-d H:i:s");
+        }
+
+        return Attribute::make(
+            get: fn($value, array $attributes) => $dateString,
         );
     }
 

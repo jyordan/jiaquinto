@@ -17,6 +17,7 @@
                     <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">Appointment Date</th>
                     <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">Appointment Status</th>
                     <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">Flow Direction</th>
+                    <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">Converted At</th>
                     {{-- <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">Source</th>
                     <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">Opportunity ID</th>
                     <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">Patient ID</th>
@@ -40,8 +41,10 @@
                             {{ $log->appointment_status }}</td>
                         <td class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">
                             {{ $log->flow_direction }}</td>
+                        <th class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">
+                            {{ $log->converted_stamp }}</td>
                         {{-- <td class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap text-gray-900 dark:text-gray-100">
-                            {{ $log->source }}</td>
+                        {{ $log->source }}</td>
                         <td class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">{{ $log->opportunity_id }}</td>
                         <td class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">{{ $log->patient_id }}</td>
                         <td class="border border-gray-300 dark:border-gray-600 p-2 text-nowrap">{{ $log->patient_phone }}</td>
