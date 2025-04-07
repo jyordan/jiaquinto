@@ -1,5 +1,5 @@
 <div class="p-6 bg-white dark:bg-gray-800 shadow-md rounded">
-    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">{{ $conversion->company_name }} Conversion Logs ({{ $logs->count() }})</h2>
+    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">{{ $conversion->company_name }} Conversion Logs ({{ $logs->total() }})</h2>
 
     <!-- Search Bar -->
     <input type="text" wire:model.live="search"
@@ -66,5 +66,14 @@
     <!-- Pagination -->
     <div class="mt-4 text-gray-900 dark:text-gray-100">
         {{ $logs->links() }}
+    </div>
+
+    <!-- Loader -->
+    <div wire:loading>
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-lg w-1/3">
+                <span>Loading...</span>
+            </div>
+        </div>
     </div>
 </div>

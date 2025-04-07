@@ -18,6 +18,13 @@ class ConversionLogsTable extends Component
 
     protected $queryString = ['search'];
 
+    public $readyToLoad = false;
+
+    public function loadLogs()
+    {
+        $this->readyToLoad = true;
+    }
+
     public function mount($conversionId)
     {
         $this->conversionId = $conversionId;
@@ -35,7 +42,7 @@ class ConversionLogsTable extends Component
                     ->orWhere('contact_name', 'like', "%{$this->search}%");
             })
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage, ['*'], 'logPage');
 
         return view('livewire.conversion-logs-table', compact('logs'));
     }

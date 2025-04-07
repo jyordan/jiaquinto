@@ -22,6 +22,7 @@ class ConversionKeysTable extends Component
     public $optionGhlPipelines = [];
     public $optionGhlPipelineStages = [];
     public $optionClinikoAppTypes = [];
+    public $perPage = 10; // Pagination size
 
     public $form = [
         'company_name' => '',
@@ -197,7 +198,7 @@ class ConversionKeysTable extends Component
     public function render()
     {
         return view('livewire.conversion-keys-table', [
-            'conversionKeys' => ConversionKey::latest()->paginate(10),
+            'conversionKeys' => ConversionKey::latest()->paginate($this->perPage, ['*'], 'keyPage'),
         ]);
     }
 }
