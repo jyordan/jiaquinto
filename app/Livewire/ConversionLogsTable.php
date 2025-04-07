@@ -33,16 +33,20 @@ class ConversionLogsTable extends Component
 
     public function render()
     {
-        $logs = ConversionLog::query()
-            ->where('conversion_id', $this->conversionId) // Filter logs by conversion ID
-            ->when($this->search, function ($query) {
-                $query->where('patient_name', 'like', "%{$this->search}%")
-                    ->orWhere('patient_email', 'like', "%{$this->search}%")
-                    ->orWhere('contact_email', 'like', "%{$this->search}%")
-                    ->orWhere('contact_name', 'like', "%{$this->search}%");
-            })
-            ->orderBy('created_at', 'asc')
-            ->paginate($this->perPage, ['*'], 'logPage');
+        if ($this->readyToLoad) {
+            $logs = ConversionLog::query()
+                ->where('conversion_id', $this->conversionId) // Filter logs by conversion ID
+                ->when($this->search, function ($query) {
+                    $query->where('patient_name', 'like', "%{$this->search}%")
+                        ->orWhere('patient_email', 'like', "%{$this->search}%")
+                        ->orWhere('contact_email', 'like', "%{$this->search}%")
+                        ->orWhere('contact_name', 'like', "%{$this->search}%");
+                })
+                ->orderBy('created_at', 'asc')
+                ->paginate($this->perPage, ['*'], 'logPage');
+        } else {
+            $logs = [];
+        }
 
         return view('livewire.conversion-logs-table', compact('logs'));
     }
