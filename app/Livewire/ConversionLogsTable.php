@@ -41,7 +41,7 @@ class ConversionLogsTable extends Component
                     ->orWhere('contact_email', 'like', "%{$this->search}%")
                     ->orWhere('contact_name', 'like', "%{$this->search}%");
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate($this->perPage, ['*'], 'logPage');
 
         return view('livewire.conversion-logs-table', compact('logs'));
