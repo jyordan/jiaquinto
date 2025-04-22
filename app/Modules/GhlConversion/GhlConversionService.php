@@ -29,7 +29,7 @@ class GhlConversionService
         $this->clinikoApi->setToken($cToken);
         $this->ghlApi->setToken($ghlToken);
 
-        $appointments = $this->getNewAppointments($appTypeId);
+        $appointments = $this->getNewAppointments($appTypeId, $model);
         $newData = $this->processAppointments($appointments, $pipelineId, $pipelineStageId);
         foreach ($newData as $data) {
             $appointmentId = data_get($data, 'appointment.id');
@@ -81,13 +81,17 @@ class GhlConversionService
         }
     }
 
-    protected function getNewAppointments($appTypeId): array
+    protected function getNewAppointments($appTypeId, ConversionKey $model): array
     {
         $formattedDate = Carbon::now()->subHour()->toIso8601ZuluString();
 
         if (app()->environment('local')) {
             $formattedDate = Carbon::now()->subDays(150)->toIso8601ZuluString();
         }
+
+        $logAppId = $model->conversionLogs
+            ->pluck('appointment_id')
+            ->toArray();
 
         $params = [
             'order=desc',
@@ -105,6 +109,7 @@ class GhlConversionService
                 $patient = $this->clinikoApi->request($url);
                 return compact('appointment', 'patient');
             })
+            ->whereNotIn('id', $logAppId)
             ->values()
             ->toArray();
     }
@@ -134,7 +139,7 @@ class GhlConversionService
                 }
             }
 
-            if ($isMoved || app()->environment('local')) {
+            if ($isMoved) {
                 $results[] = $cliniko + compact('opportunity', 'contact');
             }
         }
