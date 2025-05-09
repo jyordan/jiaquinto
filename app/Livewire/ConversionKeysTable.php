@@ -198,7 +198,7 @@ class ConversionKeysTable extends Component
     public function render()
     {
         return view('livewire.conversion-keys-table', [
-            'conversionKeys' => ConversionKey::latest()->paginate($this->perPage, ['*'], 'keyPage'),
+            'conversionKeys' => ConversionKey::latest('id')->paginate($this->perPage, ['*'], 'keyPage'),
         ]);
     }
 }
